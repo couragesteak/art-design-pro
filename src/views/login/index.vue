@@ -80,14 +80,15 @@
                 />
               </div>
               <p class="error-text" :class="{ 'show-error-text': !isPassing && isClickPass }">{{
-                $t('login.placeholder[2]')
-              }}</p>
+                  $t('login.placeholder[2]')
+                }}</p>
             </div>
 
             <div class="forget-password">
               <el-checkbox v-model="formData.rememberPassword">{{
-                $t('login.rememberPwd')
-              }}</el-checkbox>
+                  $t('login.rememberPwd')
+                }}
+              </el-checkbox>
               <router-link to="/forget-password">{{ $t('login.forgetPwd') }}</router-link>
             </div>
 
@@ -117,119 +118,143 @@
 </template>
 
 <script setup lang="ts">
-  import LeftView from '@/components/Pages/Login/LeftView.vue'
-  import { SystemInfo } from '@/config/setting'
-  import { ElMessage, ElNotification } from 'element-plus'
-  import { useUserStore } from '@/store/modules/user'
-  import { HOME_PAGE } from '@/router'
-  import { ApiStatus } from '@/utils/http/status'
-  import { getCssVariable } from '@/utils/utils'
-  import { LanguageEnum, SystemThemeEnum } from '@/enums/appEnum'
-  import { useI18n } from 'vue-i18n'
-  const { t } = useI18n()
-  import { useSettingStore } from '@/store/modules/setting'
-  import type { FormInstance, FormRules } from 'element-plus'
+import LeftView from '@/components/Pages/Login/LeftView.vue'
+import { SystemInfo } from '@/config/setting'
+import { ElMessage, ElNotification } from 'element-plus'
+import { useUserStore } from '@/store/modules/user'
+import { HOME_PAGE } from '@/router'
+import { ApiStatus } from '@/utils/http/status'
+import { getCssVariable } from '@/utils/utils'
+import { LanguageEnum, SystemThemeEnum } from '@/enums/appEnum'
+import { useI18n } from 'vue-i18n'
 
-  const userStore = useUserStore()
-  const router = useRouter()
-  const isPassing = ref(false)
-  const isClickPass = ref(false)
+const { t } = useI18n()
+import { useSettingStore } from '@/store/modules/setting'
+import type { FormInstance, FormRules } from 'element-plus'
 
-  const systemName = SystemInfo.name
-  const formRef = ref<FormInstance>()
-  const formData = reactive({
-    username: SystemInfo.login.username,
-    password: SystemInfo.login.password,
-    rememberPassword: true
-  })
+const userStore = useUserStore()
+const router = useRouter()
+const isPassing = ref(false)
+const isClickPass = ref(false)
 
-  const rules = computed<FormRules>(() => ({
-    username: [{ required: true, message: t('login.placeholder[0]'), trigger: 'blur' }],
-    password: [{ required: true, message: t('login.placeholder[1]'), trigger: 'blur' }]
-  }))
+const systemName = SystemInfo.name
+const formRef = ref<FormInstance>()
+const formData = reactive({
+  username: SystemInfo.login.username,
+  password: SystemInfo.login.password,
+  rememberPassword: true
+})
 
-  const loading = ref(false)
-  const { width } = useWindowSize()
+const rules = computed<FormRules>(() => ({
+  username: [ { required: true, message: t('login.placeholder[0]'), trigger: 'blur' } ],
+  password: [ { required: true, message: t('login.placeholder[1]'), trigger: 'blur' } ]
+}))
 
-  const store = useSettingStore()
-  const isDark = computed(() => store.isDark)
+const loading = ref(false)
+const { width } = useWindowSize()
 
-  const onPass = () => {}
+const store = useSettingStore()
+const isDark = computed(() => store.isDark)
 
-  const handleSubmit = async () => {
-    if (!formRef.value) return
+const onPass = () => {
+}
 
-    await formRef.value.validate(async (valid) => {
-      if (valid) {
-        if (!isPassing.value) {
-          isClickPass.value = true
-          return
-        }
+const handleSubmit = async () => {
+  if (!formRef.value) return
 
-        loading.value = true
-        try {
-          const res = await UserService.mockLogin({
-            body: JSON.stringify({
-              username: formData.username,
-              password: formData.password
-            })
-          })
-
-          let { code, data } = res
-          if (code === ApiStatus.success && data) {
-            userStore.setUserInfo(data)
-            userStore.setLoginStatus(true)
-            showLoginSuccessNotice()
-            router.push(HOME_PAGE)
-          } else {
-            ElMessage.error(res.message)
-          }
-        } finally {
-          loading.value = false
-        }
+  await formRef.value.validate(async (valid) => {
+    if (valid) {
+      if (!isPassing.value) {
+        isClickPass.value = true
+        return
       }
+
+      loading.value = true
+      try {
+        // const res = await UserService.mockLogin({
+        //   body: JSON.stringify({
+        //     username: formData.username,
+        //     password: formData.password,
+        //
+        //   })
+        // })
+
+        // {
+        //     body: JSON.stringify({
+        //       username: formData.username,
+        //       password: formData.password
+        //     })
+        //   }
+
+        const res = await userService.login(
+          {
+            username: formData.username,
+            password: formData.password,
+            platform: "customer",
+          }
+        )
+
+        console.log("===登录===")
+        console.log(res)
+        // console.log(res2)
+
+        let { code, data } = res
+        if (code === ApiStatus.success && data) {
+          userStore.setUserInfo(data)
+          userStore.setLoginStatus(true)
+          showLoginSuccessNotice()
+          router.push(HOME_PAGE)
+        } else {
+          ElMessage.error(res.message)
+        }
+      } finally {
+        loading.value = false
+      }
+    }
+  })
+}
+
+// 登录成功提示
+const showLoginSuccessNotice = () => {
+  setTimeout(() => {
+    ElNotification({
+      title: t('login.success.title'),
+      type: 'success',
+      showClose: false,
+      duration: 2500,
+      zIndex: 10000,
+      message: `${ t('login.success.message') }, ${ systemName }!`
     })
-  }
+  }, 300)
+}
 
-  // 登录成功提示
-  const showLoginSuccessNotice = () => {
-    setTimeout(() => {
-      ElNotification({
-        title: t('login.success.title'),
-        type: 'success',
-        showClose: false,
-        duration: 2500,
-        zIndex: 10000,
-        message: `${t('login.success.message')}, ${systemName}!`
-      })
-    }, 300)
-  }
+// 切换语言
+const { locale } = useI18n()
 
-  // 切换语言
-  const { locale } = useI18n()
+const changeLanguage = (lang: LanguageEnum) => {
+  if (locale.value === lang) return
+  locale.value = lang
+  userStore.setLanguage(lang)
+}
 
-  const changeLanguage = (lang: LanguageEnum) => {
-    if (locale.value === lang) return
-    locale.value = lang
-    userStore.setLanguage(lang)
-  }
+// 切换主题
+import { useTheme } from '@/composables/useTheme'
+import { UserService } from '@/api/usersApi'
+import { ArticleService } from "@/api/articleApi";
+import { userService } from "@/api/user";
 
-  // 切换主题
-  import { useTheme } from '@/composables/useTheme'
-  import { UserService } from '@/api/usersApi'
+const toggleTheme = () => {
+  let { LIGHT, DARK } = SystemThemeEnum
+  useTheme().switchTheme(useSettingStore().systemThemeType === LIGHT ? DARK : LIGHT)
+}
 
-  const toggleTheme = () => {
-    let { LIGHT, DARK } = SystemThemeEnum
-    useTheme().switchTheme(useSettingStore().systemThemeType === LIGHT ? DARK : LIGHT)
-  }
-
-  // 语言配置
-  const languageOptions = [
-    { value: LanguageEnum.ZH, label: '简体中文' },
-    { value: LanguageEnum.EN, label: 'English' }
-  ]
+// 语言配置
+const languageOptions = [
+  { value: LanguageEnum.ZH, label: '简体中文' },
+  { value: LanguageEnum.EN, label: 'English' }
+]
 </script>
 
 <style lang="scss" scoped>
-  @use './index';
+@use './index';
 </style>

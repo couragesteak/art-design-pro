@@ -284,6 +284,16 @@ export default {
       console: 'Console',
       analysis: 'Analysis'
     },
+    tts: {
+      compose: '文本配音'
+    },
+    shortVideo: {
+      imgVideo: '图片视频',
+      aiImg: '配图'
+    },
+    buy: {
+      buy: '购买订阅'
+    },
     widgets: {
       title: 'Components',
       iconList: 'Icon List',

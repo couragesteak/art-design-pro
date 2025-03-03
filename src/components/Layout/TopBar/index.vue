@@ -137,12 +137,14 @@
             popper-style="border: 1px solid var(--art-border-dashed-color); border-radius: calc(var(--custom-radius) / 2 + 4px); padding: 5px 16px; 5px 16px;"
           >
             <template #reference>
-              <img class="cover" src="@imgs/user/avatar.png" />
+<!--              <img class="cover" src="@imgs/user/avatar.png" />-->
+              <img class="cover" :src="getAvatar(userInfo)" />
             </template>
             <template #default>
               <div class="user-menu-box">
                 <div class="user-head">
-                  <img class="cover" src="@imgs/user/avatar.png" style="float: left" />
+<!--                  <img class="cover" src="@imgs/user/avatar.png" style="float: left" />-->
+                  <img class="cover" :src="getAvatar(userInfo)" style="float: left" />
                   <div class="user-wrap">
                     <span class="name">{{ userInfo.username }}</span>
                     <span class="email" v-if="userInfo.email">{{ userInfo.email }}</span>
@@ -262,6 +264,13 @@
     }
   }
 
+  const getAvatar = (userInfo) => {
+    console.log("头像信息")
+    console.log(userInfo)
+    console.log(userInfo.avatar)
+    return userInfo.avatar;
+  }
+
   const visibleMenu = () => {
     settingStore.setMenuOpen(!menuOpen.value)
   }
@@ -296,9 +305,10 @@
   }
 
   const reload = (time: number = 0) => {
-    setTimeout(() => {
-      settingStore.reload()
-    }, time)
+    // 设置引导
+    // setTimeout(() => {
+    //   settingStore.reload()
+    // }, time)
   }
 
   const initLanguage = () => {

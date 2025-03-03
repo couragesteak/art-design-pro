@@ -13,6 +13,8 @@ import { MenuListType } from '@/types/menu'
  * 可以是 i18n 的 key，也可以是字符串，比如：'用户列表'
  */
 export const asyncRoutes: MenuListType[] = [
+
+  // 面板
   {
     id: 1,
     name: 'Dashboard',
@@ -46,6 +48,103 @@ export const asyncRoutes: MenuListType[] = [
       }
     ]
   },
+
+  // 配音
+  {
+    id: 2000,
+    name: 'tts',
+    path: '/tts',
+    component: RoutesAlias.Home,
+    meta: {
+      title: '配音',
+      icon: '&#xe721;',
+      keepAlive: false
+    },
+    children: [
+      {
+        id: 101,
+        path: 'compose',
+        name: 'Compose',
+        component: "/tts/compose",
+        meta: {
+          title: '文本配音',
+          keepAlive: true
+        }
+      },
+      {
+        id: 101,
+        path: 'history',
+        name: 'History',
+        component: "/tts/tts_history",
+        meta: {
+          title: '历史记录',
+          keepAlive: true
+        }
+      },
+    ]
+  },
+
+  // 短视频制作
+  {
+    id: 2002,
+    name: 'buy',
+    path: '/buy',
+    component: RoutesAlias.Home,
+    meta: {
+      title: '购买订阅',
+      icon: '&#xe721;',
+      keepAlive: false
+    },
+    children: [
+      {
+        id: 20012,
+        path: 'buy',
+        name: 'buy',
+        component: "/buy/buy",
+        meta: {
+          title: '订阅',
+          keepAlive: true
+        }
+      },
+
+    ]
+  },
+
+  // 购买订阅
+  {
+    id: 2001,
+    name: 'shortVideo',
+    path: '/shortVideo',
+    component: RoutesAlias.Home,
+    meta: {
+      title: '短视频',
+      icon: '&#xe721;',
+      keepAlive: false
+    },
+    children: [
+      {
+        id: 20012,
+        path: 'imgVideo',
+        name: 'imgVideo',
+        component: "/shortVideo/imgVideo",
+        meta: {
+          title: '图片视频制作',
+          keepAlive: true
+        }
+      },
+      {
+        id: 20013,
+        path: 'aiImg',
+        name: 'aiImg',
+        component: "/shortVideo/aiImg",
+        meta: {
+          title: '配图',
+          keepAlive: true
+        }
+      },
+    ]
+  },
+
   {
     id: 5,
     path: '/widgets',
@@ -733,7 +832,7 @@ export const asyncRoutes: MenuListType[] = [
         component: RoutesAlias.PlanLog,
         meta: {
           title: 'menus.plan.log',
-          showTextBadge: `${upgradeLogList.value[0].version}`,
+          showTextBadge: `${ upgradeLogList.value[0].version }`,
           keepAlive: true
         }
       }

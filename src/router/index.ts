@@ -40,6 +40,68 @@ export const HOME_PAGE = '/dashboard/console'
 /** 静态路由配置 */
 const staticRoutes: AppRouteRecordRaw[] = [
   { path: '/', redirect: HOME_PAGE },
+  // 文本配音
+  {
+    path: '/tts',
+    component: Home,
+    name: 'tts',
+    meta: { title: 'menus.tts.compose' },
+    children: [
+      {
+        path: "/tts/compose",
+        name: 'Compose',
+        component: () => import('@views/tts/compose.vue'),
+        meta: { title: 'menus.tts.compose', keepAlive: true }
+      },
+      {
+        path: "/tts/history",
+        name: 'Hisroty',
+        component: () => import('@views/tts/tts_history.vue'),
+        meta: { title: 'menus.tts.compose', keepAlive: true }
+      },
+    ]
+  },
+
+  // 短视频制作
+  {
+    path: '/shortVideo',
+    component: Home,
+    name: 'shortVideo',
+    meta: { title: 'menus.shortVideo.imgVideo' },
+    children: [
+      {
+        path: "/shortVideo/imgVideo",
+        name: 'ImgVideo',
+        component: () => import('@views/aiVideo/imgVideo.vue'),
+        meta: { title: 'menus.tts.compose', keepAlive: true }
+      },
+      {
+        path: "/shortVideo/aiImg",
+        name: 'aiImg',
+        component: () => import('@views/aiVideo/aiImg.vue'),
+        meta: { title: 'menus.shortVideo.aiImg', keepAlive: true }
+      },
+    ]
+  },
+
+  // 购买订阅
+  {
+    path: '/shortVideo',
+    component: Home,
+    name: 'shortVideo',
+    meta: { title: 'menus.shortVideo.imgVideo' },
+    children: [
+      {
+        path: "/buy/buy",
+        name: 'buy',
+        component: () => import('@views/buy/buy.vue'),
+        meta: { title: 'menus.tts.compose', keepAlive: true }
+      },
+
+    ]
+  },
+
+  // 面板
   {
     path: '/dashboard',
     component: Home,
@@ -223,7 +285,7 @@ const setSystemTheme = (to: RouteLocationNormalized): void => {
 export const setPageTitle = (to: RouteLocationNormalized): void => {
   const { title } = to.meta
   if (title) {
-    document.title = `${formatMenuTitle(String(title))} - ${SystemInfo.name}`
+    document.title = `${ formatMenuTitle(String(title)) } - ${ SystemInfo.name }`
   }
 }
 

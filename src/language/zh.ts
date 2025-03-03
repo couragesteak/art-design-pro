@@ -268,6 +268,16 @@ export default {
       console: '工作台',
       analysis: '分析页'
     },
+    tts: {
+      compose: '文本配音'
+    },
+    shortVideo: {
+      imgVideo: '图片视频',
+      aiImg: '配图'
+    },
+    buy: {
+      buy: '购买订阅'
+    },
     widgets: {
       title: '组件中心',
       iconList: 'Icon 图标',

@@ -9,10 +9,10 @@ export const ElementPlusTheme = {
 // 系统信息
 export const SystemInfo = {
   // 系统名称
-  name: 'Art Design Pro',
-  // 登录默认帐号、密码
+  name: '自媒体Ai助手',
+  // 登录默认帐号、密码 admin 123456
   login: {
-    username: 'admin',
+    username: 'couragesteak',
     password: '123456'
   }
 }
